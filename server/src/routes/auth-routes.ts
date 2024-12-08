@@ -34,7 +34,7 @@ export const login = async (req: Request, res: Response) => {
     );
 
     // Send response with token
-    res.json({
+    return res.json({
       message: 'Login successful',
       token,
       user: {
@@ -45,6 +45,7 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login' });
+    return;
   }
 };
 
