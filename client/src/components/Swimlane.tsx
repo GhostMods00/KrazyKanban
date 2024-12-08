@@ -1,39 +1,26 @@
 import TicketCard from './TicketCard';
 import { TicketData } from '../interfaces/TicketData';
-import { ApiMessage } from '../interfaces/ApiMessage';
 
-interface SwimlaneProps {
+interface SwimLaneProps {
   title: string;
   tickets: TicketData[];
-  deleteTicket: (ticketId: number) => Promise<ApiMessage>
+  className: string;
+  onDelete: (id: number) => void;
 }
 
-const Swimlane = ({ title, tickets, deleteTicket }: SwimlaneProps) => {
-  const getStatusClass = (status: string) => {
-    switch (status) {
-      case 'Todo':
-        return 'swim-lane todo';
-      case 'In Progress':
-        return 'swim-lane inprogress';
-      case 'Done':
-        return 'swim-lane done';
-      default:
-        return 'swim-lane';
-    }
-  };
-
+const SwimLane = ({ title, tickets, className, onDelete }: SwimLaneProps) => {
   return (
-    <div className={`swimlane ${getStatusClass(title)}`}>
+    <div className={`swim-lane ${className}`}>
       <h2>{title}</h2>
-      {tickets.map(ticket => (
+      {tickets.map((ticket) => (
         <TicketCard 
-          key={ticket.id}
-          ticket={ticket}
-          deleteTicket={deleteTicket}
+          key={ticket.id} 
+          ticket={ticket} 
+          onDelete={onDelete}
         />
       ))}
     </div>
   );
 };
 
-export default Swimlane;
+export default SwimLane;

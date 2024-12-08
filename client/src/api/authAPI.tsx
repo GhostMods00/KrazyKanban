@@ -11,8 +11,7 @@ const login = async (userInfo: UserLogin) => {
     });
 
     if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.message || 'Login failed');
+      throw new Error('Login failed');
     }
 
     const data = await response.json();
@@ -20,6 +19,6 @@ const login = async (userInfo: UserLogin) => {
   } catch (error) {
     throw error;
   }
-}
+};
 
 export { login };
