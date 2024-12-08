@@ -1,35 +1,42 @@
 import { Link } from 'react-router-dom';
-
 import { TicketData } from '../interfaces/TicketData';
-import { ApiMessage } from '../interfaces/ApiMessage';
-import { MouseEventHandler } from 'react';
 
 interface TicketCardProps {
   ticket: TicketData;
-  deleteTicket: (ticketId: number) => Promise<ApiMessage>
+  onDelete: (id: number) => void;
 }
 
-const TicketCard = ({ ticket, deleteTicket }: TicketCardProps) => {
-
-  const handleDelete: MouseEventHandler<HTMLButtonElement> = async (event) => {
-    const ticketId = Number(event.currentTarget.value);
-    if (!isNaN(ticketId)) {
-      try {
-        const data = await deleteTicket(ticketId);
-        return data;
-      } catch (error) {
-        console.error('Failed to delete ticket:', error);
-      }
+const TicketCard = ({ ticket, onDelete }: TicketCardProps) => {
+  const handleDelete = () => {
+    if (ticket.id !== null) {
+      onDelete(ticket.id);
     }
   };
 
   return (
-    <div className='ticket-card'>
-      <h3>{ticket.name}</h3>
-      <p>{ticket.description}</p>
-      <p>{ticket.assignedUser?.username}</p>
-      <Link to='/edit' state={{id: ticket.id}} type='button' className='editBtn'>Edit</Link>
-      <button type='button' value={String(ticket.id)} onClick={handleDelete} className='deleteBtn'>Delete</button>
+    <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+      <h3 className="font-semibold text-lg text-gray-800 mb-2">{ticket.title}</h3>
+      <p className="text-gray-600 mb-3">{ticket.description}</p>
+      <p className="text-sm text-gray-500 mb-4">Assigned to: {ticket.username}</p>
+      
+      <div className="flex space-x-3">
+        {ticket.id && (
+          <>
+            <Link 
+              to={`/edit-ticket/${ticket.id}`}
+              className="text-primary hover:text-secondary transition-colors"
+            >
+              Edit
+            </Link>
+            <button 
+              onClick={handleDelete}
+              className="text-red-500 hover:text-red-700 transition-colors"
+            >
+              Delete
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
