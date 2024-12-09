@@ -1,31 +1,61 @@
 import { Request, Response, NextFunction } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 import jwt from 'jsonwebtoken';
 
-interface JwtPayload {
+// Define user payload interface
+interface UserPayload {
+  id: string;
+  email: string;
   username: string;
+  // Add other user properties you need
 }
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): Response | void => {
-  // Get the token from the Authorization header
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN format
+// Extend Request type properly with Express generics
+interface AuthRequest extends Request<
+  ParamsDictionary,
+  any,
+  any,
+  ParsedQs,
+  Record<string, any>
+> {
+  user?: UserPayload;
+}
 
-  // If no token is provided, return 401 Unauthorized
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied. No token provided.' });
-  }
-
+// Define the middleware function with proper Express types
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    // Verify the token using the JWT_SECRET
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
-    
-    // Add the user data to the request object
-    (req as any).user = decoded;
-    
-    // Continue to the next middleware/route handler
-    next();
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      res.status(401).json({ message: 'Authentication token required' });
+      return;
+    }
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined in environment variables');
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(403).json({ message: 'Invalid or expired token' });
+        return;
+      }
+
+      // Type assertion for the decoded token
+      (req as AuthRequest).user = decoded as UserPayload;
+      next();
+    });
   } catch (error) {
-    // If token is invalid or expired, return 403 Forbidden
-    return res.status(403).json({ message: 'Invalid or expired token.' });
+    console.error('Auth middleware error:', error);
+    res.status(500).json({ message: 'Server error during authentication' });
   }
 };
+
+// Export the types
+export type { AuthRequest, UserPayload };
