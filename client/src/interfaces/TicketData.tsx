@@ -1,10 +1,23 @@
-import { UserData } from './UserData';
+// // src/interfaces/TicketData.ts
+// export interface TicketData {
+//   id: number;
+//   name: string;
+//   description: string;
+//   status: string;
+//   assignedUserId?: number;
+//   assignedUser?: {
+//     username: string;
+//   };
+// }
 
+// src/interfaces/TicketData.ts
 export interface TicketData {
-  id: number | null;
-  name: string | null;
-  description: string | null;
-  status: string | null;
-  assignedUserId: number | null;
-  assignedUser: UserData | null;
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+  assignedUserId: number;  // Add this line
+  assignedUser?: {
+    username: string;
+  };
 }
