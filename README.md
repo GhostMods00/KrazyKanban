@@ -1,14 +1,16 @@
 # 🎯 Krazy Kanban Board
 
+[![React](https://img.shields.io/badge/React-v18.x-61DAFB.svg)](https://reactjs.org/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
 [![Node.js](https://img.shields.io/badge/Node.js-v18.x-green.svg)](https://nodejs.org/)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-v5.x-blue.svg)](https://www.typescriptlang.org/)
 
-[![React](https://img.shields.io/badge/React-v18.x-61DAFB.svg)](https://reactjs.org/)
-
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v15.x-336791.svg)](https://www.postgresql.org/)
+
+
 
 A modern, efficient task management system built with TypeScript, React, and PostgreSQL. Organize your work using an intuitive Kanban board system with customizable columns for Todo, In Progress, and Done tasks.
 
